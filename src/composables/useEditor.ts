@@ -1,13 +1,14 @@
-import { onMounted, type Ref, ref } from 'vue'
+import { onMounted } from 'vue'
 import { createHighlighter } from 'shiki/bundle/web'
 import { shikiToMonaco } from '@shikijs/monaco'
 import * as monaco from 'monaco-editor-core'
 import dotLang from '@/lib/dot.tmLanguage.json'
 
-export function useEditor (editorId: string): {
-  editor: Ref<monaco.editor.IStandaloneCodeEditor | null>
+export default function useEditor (editorId: string): {
+  editor: monaco.editor.IStandaloneCodeEditor | null
+  getEditorValue: () => string
 } {
-  const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null)
+  let editor: monaco.editor.IStandaloneCodeEditor | null = null
 
   onMounted(async () => {
     const highlighter = await createHighlighter({
@@ -23,7 +24,7 @@ export function useEditor (editorId: string): {
     if (container === null) {
       return
     }
-    editor.value = monaco.editor.create(container, {
+    editor = monaco.editor.create(container, {
       value: `Hola {{=it.name}}, como está todo en {{=it.city}}.
 
 Estas son las categorías
@@ -40,6 +41,7 @@ Es cierto
         top: 30,
         bottom: 10
       },
+      rulers: [80],
       wordWrap: 'wordWrapColumn',
       wordWrapColumn: 80,
       minimap: {
@@ -48,7 +50,15 @@ Es cierto
     })
   })
 
+  function getEditorValue (): string {
+    if (editor === null) {
+      return ''
+    }
+    return editor.getValue()
+  }
+
   return {
-    editor
+    editor,
+    getEditorValue
   }
 }

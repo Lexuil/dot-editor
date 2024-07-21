@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="my-5">
     <h1 class="text-4xl text-center font-bold">
       doT.js Editor
     </h1>

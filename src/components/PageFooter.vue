@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="my-5">
     <p class="text-center text-sm text-gray-500">
       Created by <a
         href="https://github.com/Lexuil"
