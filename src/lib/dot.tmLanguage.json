@@ -1,0 +1,179 @@
+{
+  "displayName": "doTjs",
+  "fileTypes": [
+    "dot"
+  ],
+  "name": "dot",
+  "patterns": [
+    {
+      "begin": "\\{\\{",
+      "beginCaptures": {
+        "0": { "name": "keyword.control.dotjs" }
+      },
+      "end": "\\}\\}",
+      "endCaptures": {
+        "0": { "name": "keyword.control.dotjs" }
+      },
+      "patterns": [
+        {
+          "match": "[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*",
+          "name": "constant.numeric.dotjs"
+        },
+        {
+          "begin": "=",
+          "beginCaptures": {
+            "0": { "name": "support.function.dotjs" }
+          },
+          "end": "(?=\\}\\})",
+          "name": "comment.dotjs.interpolate",
+          "patterns": [
+            {
+              "match": "\\bit\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "variable.language.dotjs"
+            },
+            {
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "constant.numeric.dotjs"
+            }
+          ]
+        },
+        {
+          "begin": "!",
+          "beginCaptures": {
+            "0": { "name": "support.function.dotjs" }
+          },
+          "end": "(?=\\}\\})",
+          "name": "comment.dotjs.encode",
+          "patterns": [
+            {
+              "match": "\\bit\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "variable.language.dotjs"
+            },
+            {
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "constant.numeric.dotjs"
+            }
+          ]
+        },
+        {
+          "begin": "#",
+          "beginCaptures": {
+            "0": { "name": "support.function.dotjs" }
+          },
+          "end": "(?=\\}\\})",
+          "name": "comment.dotjs.use",
+          "patterns": [
+            {
+              "match": "\\bit\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "variable.language.dotjs"
+            },
+            {
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "constant.numeric.dotjs"
+            }
+          ]
+        },
+        {
+          "begin": "##",
+          "beginCaptures": {
+            "0": { "name": "support.function.dotjs" }
+          },
+          "end": "#(?=\\}\\})",
+          "name": "comment.dotjs.define",
+          "patterns": [
+            {
+              "match": "\\bit\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "variable.language.dotjs"
+            },
+            {
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "constant.numeric.dotjs"
+            }
+          ]
+        },
+        {
+          "begin": "\\?\\??",
+          "beginCaptures": {
+            "0": { "name": "support.function.dotjs" }
+          },
+          "end": "(?=\\}\\})",
+          "name": "comment.dotjs.conditional",
+          "patterns": [
+            {
+              "match": "\\bit\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "variable.language.dotjs"
+            },
+            {
+              "begin": "\"",
+              "beginCaptures": {
+                "0": { "name": "punctuation.definition.string.begin.dotjs" }
+              },
+              "end": "\"",
+              "endCaptures": {
+                "0": { "name": "punctuation.definition.string.end.dotjs" }
+              },
+              "contentName": "string.quoted.double.dotjs"
+            },
+            {
+              "begin": "'",
+              "beginCaptures": {
+                "0": { "name": "punctuation.definition.string.begin.dotjs" }
+              },
+              "end": "'",
+              "endCaptures": {
+                "0": { "name": "punctuation.definition.string.end.dotjs" }
+              },
+              "contentName": "string.quoted.single.dotjs"
+            },
+            {
+              "match": "(===|!==|==|!=|<=|>=|<|>|&&|\\|\\|)",
+              "name": "keyword.operator.comparison.dotjs"
+            },
+            {
+              "match": "(true|false|undefined|null)",
+              "name": "constant.language.dotjs"
+            },
+            {
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "constant.numeric.dotjs"
+            }
+          ]
+        },
+        {
+          "begin": "~",
+          "beginCaptures": {
+            "0": { "name": "support.function.dotjs" }
+          },
+          "end": "(?=\\}\\})",
+          "name": "comment.dotjs.iterate",
+          "patterns": [
+            {
+              "match": "\\bit\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "variable.language.dotjs"
+            },
+            {
+              "match": "\\:[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "keyword.operator.dotjs"
+            },
+            {
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "constant.numeric.dotjs"
+            }
+          ]
+        },
+        {
+          "begin": "",
+          "end": "(?=\\}\\})",
+          "name": "comment.dotjs.evaluate",
+          "patterns": [
+            {
+              "match": "\\bit\\.[a-zA-Z_][a-zA-Z0-9_]*",
+              "name": "variable.language.dotjs"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scopeName": "source.dotjs"
+}
