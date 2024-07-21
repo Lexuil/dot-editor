@@ -1,14 +1,29 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
-import {
-  type BundledLanguage,
-  type BundledTheme,
-  createHighlighter,
-  type HighlighterGeneric
-} from 'shiki/bundle/web'
+import { onMounted, ref } from 'vue'
+import { createHighlighter } from 'shiki/bundle/web'
+import { shikiToMonaco } from '@shikijs/monaco'
+import * as monaco from 'monaco-editor-core'
 import dotLang from '@/lib/dot.tmLanguage.json'
 
-const code = ref(`Hola {{=it.name}}, como está todo en {{=it.city}}.
+const editor = ref<monaco.editor.IStandaloneCodeEditor | null>(null)
+
+onMounted(async () => {
+  const highlighter = await createHighlighter({
+    langs: [dotLang as any],
+    themes: ['andromeeda']
+  })
+
+  monaco.languages.register({ id: 'dot' })
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  shikiToMonaco(highlighter, monaco)
+
+  const container = document.getElementById('container')
+  if (container === null) {
+    return
+  }
+  editor.value = monaco.editor.create(container, {
+    value: `Hola {{=it.name}}, como está todo en {{=it.city}}.
 
 Estas son las categorías
 {{~ it.categories :c}}
@@ -16,27 +31,19 @@ Estas son las categorías
 {{~}}
 
 Es cierto
-{{? it.name == "juan"}}Sí{{??}}No{{?}}`)
-const html = ref('')
-const highlighter = ref<HighlighterGeneric<BundledLanguage, BundledTheme> | null>(null)
-
-onMounted(async () => {
-  highlighter.value = await createHighlighter({
-    langs: [dotLang as any],
-    themes: ['andromeeda']
-  })
-
-  html.value = highlighter.value.codeToHtml(code.value, {
-    lang: 'dot',
-    theme: 'andromeeda'
-  })
-})
-
-watch(code, async () => {
-  if (highlighter.value === null) return
-  html.value = highlighter.value.codeToHtml(code.value, {
-    lang: 'dot',
-    theme: 'andromeeda'
+{{? it.name == "juan"}}Sí{{??}}No{{?}}`,
+    language: 'dot',
+    theme: 'andromeeda',
+    lineNumbers: 'off',
+    padding: {
+      top: 30,
+      bottom: 10
+    },
+    wordWrap: 'wordWrapColumn',
+    wordWrapColumn: 80,
+    minimap: {
+      enabled: false
+    }
   })
 })
 </script>
@@ -47,18 +54,9 @@ watch(code, async () => {
       doT.js Editor
     </h1>
 
-    <textarea
-      id="editor"
-      v-model="code"
-      name="editor"
-      cols="39"
-      rows="10"
-      class="bg-gray-800 text-white p-2 mt-4"
-    />
-
     <div
-      class="max-w-3xl"
-      v-html="html"
+      id="container"
+      class="h-96 w-[43rem]"
     />
   </main>
 </template>
