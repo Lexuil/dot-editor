@@ -1,15 +1,43 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import {
+  type BundledLanguage,
+  type BundledTheme,
+  createHighlighter,
+  type HighlighterGeneric
+} from 'shiki/bundle/web'
+import dotLang from '@/lib/dot.tmLanguage.json'
 
-const editor = ref('')
-const variables = ref<string[]>([])
+const code = ref(`Hola {{=it.name}}, como está todo en {{=it.city}}.
 
-const evaluateRegex = /\{\{([\s\S]+?)\}\}/g
+Estas son las categorías
+{{~ it.categories :c}}
+- {{=c.name}}
+{{~}}
 
-watch(editor, (text) => {
-  variables.value = [
-    ...text.matchAll(evaluateRegex)
-  ].map(match => match[1].slice(4))
+Es cierto
+{{? it.name == "juan"}}Sí{{??}}No{{?}}`)
+const html = ref('')
+const highlighter = ref<HighlighterGeneric<BundledLanguage, BundledTheme> | null>(null)
+
+onMounted(async () => {
+  highlighter.value = await createHighlighter({
+    langs: [dotLang as any],
+    themes: ['andromeeda']
+  })
+
+  html.value = highlighter.value.codeToHtml(code.value, {
+    lang: 'dot',
+    theme: 'andromeeda'
+  })
+})
+
+watch(code, async () => {
+  if (highlighter.value === null) return
+  html.value = highlighter.value.codeToHtml(code.value, {
+    lang: 'dot',
+    theme: 'andromeeda'
+  })
 })
 </script>
 
@@ -21,27 +49,16 @@ watch(editor, (text) => {
 
     <textarea
       id="editor"
-      v-model="editor"
+      v-model="code"
       name="editor"
       cols="39"
       rows="10"
       class="bg-gray-800 text-white p-2 mt-4"
     />
 
-    <div class="flex flex-col gap-2">
-      <h2 class="text-2xl font-bold text-white">
-        Variables
-      </h2>
-
-      <ul class="flex flex-col gap-1">
-        <li
-          v-for="variable in variables"
-          :key="variable"
-          class="text-white"
-        >
-          {{ variable }}
-        </li>
-      </ul>
-    </div>
+    <div
+      class="max-w-3xl"
+      v-html="html"
+    />
   </main>
 </template>
