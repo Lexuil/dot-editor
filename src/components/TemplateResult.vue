@@ -1,16 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import useEditor from '@/composables/useEditor'
 import dot from 'dot'
 dot.templateSettings.strip = false
 
-const textResult = ref('')
-const { variables, getEditorText } = useEditor()
-
-watch(variables, (newVal) => {
-  const template = dot.template(getEditorText())
-  textResult.value = template(newVal)
-})
+const { textResult } = useEditor()
 </script>
 
 <template>

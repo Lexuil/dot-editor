@@ -1,9 +1,11 @@
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, type Ref, ref, watch } from 'vue'
 import { createHighlighter } from 'shiki/bundle/web'
 import { shikiToMonaco } from '@shikijs/monaco'
 import * as monaco from 'monaco-editor-core'
 import dotLang from '@/lib/dot.tmLanguage.json'
 import useGetVariables from './useGetVariables'
+import dot from 'dot'
+dot.templateSettings.strip = false
 
 let editor: monaco.editor.IStandaloneCodeEditor | null = null
 const variables = reactive<Record<string, string>>({})
@@ -11,11 +13,24 @@ const variables = reactive<Record<string, string>>({})
 export default function useEditor (editorId?: string | undefined): {
   editor: monaco.editor.IStandaloneCodeEditor | null
   variables: Record<string, string>
+  textResult: Ref<string>
   getEditorText: () => string
   getEditorVariables: () => Promise<void>
 } {
+  // ---------------------------------------------------------------------------
+  // States
+  const textResult = ref('')
   const { getVariables } = useGetVariables()
 
+  // ---------------------------------------------------------------------------
+  // Watch
+  watch(variables, (newVal) => {
+    const template = dot.template(getEditorText())
+    textResult.value = template(newVal)
+  })
+
+  // ---------------------------------------------------------------------------
+  // Lifecycle
   onMounted(async () => {
     if (editorId === undefined) return
 
@@ -55,8 +70,17 @@ Is it true
         enabled: false
       }
     })
+
+    // Add all key listener to make getEditorVariables
+    editor.onDidChangeModelContent(() => {
+      getEditorVariables().catch(() => {})
+    })
+
+    getEditorVariables().catch(() => {})
   })
 
+  // ---------------------------------------------------------------------------
+  // Methods
   function getEditorText (): string {
     if (editor === null) {
       return ''
@@ -67,7 +91,8 @@ Is it true
   async function getEditorVariables (): Promise<void> {
     const content = getEditorText()
 
-    const newVariables = getVariables(content ?? '').reduce<Record<string, string>>((acc, curr) => {
+    const newVariables = getVariables(content ?? '')
+      .reduce<Record<string, string>>((acc, curr) => {
       acc[curr] = ''
       return acc
     }, {})
@@ -80,9 +105,11 @@ Is it true
     })
   }
 
+  // ---------------------------------------------------------------------------
   return {
     editor,
     variables,
+    textResult,
     getEditorText,
     getEditorVariables
   }
