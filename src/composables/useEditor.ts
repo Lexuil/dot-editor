@@ -1,16 +1,24 @@
-import { onMounted } from 'vue'
+import { onMounted, type Ref, ref } from 'vue'
 import { createHighlighter } from 'shiki/bundle/web'
 import { shikiToMonaco } from '@shikijs/monaco'
 import * as monaco from 'monaco-editor-core'
 import dotLang from '@/lib/dot.tmLanguage.json'
+import useGetVariables from './useGetVariables'
 
-export default function useEditor (editorId: string): {
+let editor: monaco.editor.IStandaloneCodeEditor | null = null
+
+export default function useEditor (editorId?: string | undefined): {
   editor: monaco.editor.IStandaloneCodeEditor | null
-  getEditorValue: () => string
+  variables: Ref<string[]>
+  getEditorText: () => string
+  getEditorVariables: () => Promise<void>
 } {
-  let editor: monaco.editor.IStandaloneCodeEditor | null = null
+  const variables = ref<string[]>([])
+  const { getVariables } = useGetVariables()
 
   onMounted(async () => {
+    if (editorId === undefined) return
+
     const highlighter = await createHighlighter({
       langs: [dotLang as any],
       themes: ['andromeeda']
@@ -25,15 +33,15 @@ export default function useEditor (editorId: string): {
       return
     }
     editor = monaco.editor.create(container, {
-      value: `Hola {{=it.name}}, como está todo en {{=it.city}}.
+      value: `Hi {{=it.name}}, how is everything in {{=it.city}}?
 
-Estas son las categorías
+These are the categories
 {{~ it.categories :c}}
 - {{=c.name}}
 {{~}}
 
-Es cierto
-{{? it.name == "juan"}}Sí{{??}}No{{?}}`,
+Is it true
+{{? it.condition == "yes"}}Yes{{??}}No{{?}}`,
       language: 'dot',
       theme: 'andromeeda',
       lineNumbers: 'off',
@@ -50,15 +58,22 @@ Es cierto
     })
   })
 
-  function getEditorValue (): string {
+  function getEditorText (): string {
     if (editor === null) {
       return ''
     }
     return editor.getValue()
   }
 
+  async function getEditorVariables (): Promise<void> {
+    const content = getEditorText()
+    variables.value = getVariables(content ?? '')
+  }
+
   return {
     editor,
-    getEditorValue
+    variables,
+    getEditorText,
+    getEditorVariables
   }
 }
