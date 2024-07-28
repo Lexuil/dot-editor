@@ -1,4 +1,4 @@
-import { onMounted, type Ref, ref } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { createHighlighter } from 'shiki/bundle/web'
 import { shikiToMonaco } from '@shikijs/monaco'
 import * as monaco from 'monaco-editor-core'
@@ -6,14 +6,14 @@ import dotLang from '@/lib/dot.tmLanguage.json'
 import useGetVariables from './useGetVariables'
 
 let editor: monaco.editor.IStandaloneCodeEditor | null = null
+const variables = reactive<Record<string, string>>({})
 
 export default function useEditor (editorId?: string | undefined): {
   editor: monaco.editor.IStandaloneCodeEditor | null
-  variables: Ref<string[]>
+  variables: Record<string, string>
   getEditorText: () => string
   getEditorVariables: () => Promise<void>
 } {
-  const variables = ref<string[]>([])
   const { getVariables } = useGetVariables()
 
   onMounted(async () => {
@@ -37,8 +37,7 @@ export default function useEditor (editorId?: string | undefined): {
 
 These are the categories
 {{~ it.categories :c}}
-- {{=c.name}}
-{{~}}
+- {{=c}}{{~}}
 
 Is it true
 {{? it.condition == "yes"}}Yes{{??}}No{{?}}`,
@@ -67,7 +66,18 @@ Is it true
 
   async function getEditorVariables (): Promise<void> {
     const content = getEditorText()
-    variables.value = getVariables(content ?? '')
+
+    const newVariables = getVariables(content ?? '').reduce<Record<string, string>>((acc, curr) => {
+      acc[curr] = ''
+      return acc
+    }, {})
+
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    Object.keys(variables).forEach(key => delete variables[key])
+
+    Object.keys(newVariables).forEach(key => {
+      variables[key] = newVariables[key]
+    })
   }
 
   return {

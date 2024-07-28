@@ -12,13 +12,29 @@ const { getEditorVariables, variables } = useEditor()
     >
       Get Template Variables
     </button>
-    <ul class="h-72 overflow-y-auto">
-      <li
-        v-for="variable in variables"
-        :key="variable"
-      >
-        {{ variable }}
-      </li>
-    </ul>
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(value, key) in variables"
+          :key="key"
+        >
+          <td>{{ key }}</td>
+          <td>
+            <input
+              v-model="variables[key]"
+              type="text"
+              class="w-full text-black"
+              placeholder="Enter value"
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 </template>
