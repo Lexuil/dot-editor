@@ -1,34 +1,40 @@
 <script setup lang="ts">
 import useEditor from '@/composables/useEditor'
-
 const { variables } = useEditor()
 </script>
 
 <template>
-  <section class="border border-gray-600 p-3 min-w-72 w-fit h-96">
-    <table class="w-full">
-      <thead>
-        <tr>
-          <th>Variable</th>
-          <th>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(value, key) in variables"
-          :key="key"
-        >
-          <td>{{ key }}</td>
-          <td>
-            <input
-              v-model="variables[key]"
-              type="text"
-              class="w-full text-black"
-              placeholder="Enter value"
-            >
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <section class="flex flex-col items-center gap-3 w-full md:w-80 md:h-96">
+    <h2 class="text-xl font-semibold text-center">
+      Variables
+    </h2>
+    <div class="border border-gray-600 w-full p-3">
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(_, key) in variables"
+            :key="key"
+          >
+            <td class="px-1 py-2">
+              {{ key }}
+            </td>
+            <td class="px-1 py-2">
+              <input
+                v-model="variables[key]"
+                type="text"
+                class="w-full text-black"
+                placeholder="Enter value"
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </template>

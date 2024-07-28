@@ -7,11 +7,11 @@ const { textResult } = useEditor()
 </script>
 
 <template>
-  <section>
+  <section class="flex flex-col items-center gap-3">
     <h2 class="text-xl font-semibold">
       Template Result
     </h2>
-    <p class="max-w-md whitespace-pre-wrap">
+    <p class="w-full md:w-[43rem] whitespace-pre-wrap border border-gray-600 p-5">
       {{ textResult }}
     </p>
   </section>
