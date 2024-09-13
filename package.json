@@ -10,6 +10,7 @@
     "lint": "eslint \"src/**/*.{js,vue}\" && vue-tsc --noEmit"
   },
   "dependencies": {
+    "@vueuse/core": "^11.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dot": "^1.1.3",

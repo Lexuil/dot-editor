@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Input from '@/components/ui/input/Input.vue'
 import useEditor from '@/composables/useEditor'
 const { variables } = useEditor()
 </script>
@@ -25,12 +26,10 @@ const { variables } = useEditor()
               {{ key }}
             </td>
             <td class="px-1 py-2">
-              <input
+              <Input
                 v-model="variables[key]"
-                type="text"
-                class="w-full text-black"
                 placeholder="Enter value"
-              >
+              />
             </td>
           </tr>
         </tbody>
