@@ -16,6 +16,7 @@ export default function useEditor (editorId?: string | undefined): {
   textResult: Ref<string>
   getEditorText: () => string
   getEditorVariables: () => Promise<void>
+  setEditorTheme: (theme: 'andromeeda' | 'min-light') => void
 } {
   // ---------------------------------------------------------------------------
   // States
@@ -36,7 +37,7 @@ export default function useEditor (editorId?: string | undefined): {
 
     const highlighter = await createHighlighter({
       langs: [dotLang as any],
-      themes: ['andromeeda']
+      themes: ['andromeeda', 'min-light']
     })
 
     monaco.languages.register({ id: 'dot' })
@@ -105,12 +106,20 @@ Is it true
     })
   }
 
+  function setEditorTheme (theme: 'andromeeda' | 'min-light'): void {
+    if (editor === null) {
+      return
+    }
+    monaco.editor.setTheme(theme)
+  }
+
   // ---------------------------------------------------------------------------
   return {
     editor,
     variables,
     textResult,
     getEditorText,
-    getEditorVariables
+    getEditorVariables,
+    setEditorTheme
   }
 }

@@ -8,8 +8,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import useEditor from '@/composables/useEditor'
+import { watch } from 'vue'
 
 const mode = useColorMode()
+const { setEditorTheme } = useEditor()
+
+watch(() => mode.value, (value) => {
+  setEditorTheme(value === 'dark' ? 'andromeeda' : 'min-light')
+})
 </script>
 
 <template>
