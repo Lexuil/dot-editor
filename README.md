@@ -8,3 +8,5 @@ Features:
 - Variables detection
 - Variables definition
 - Template rendering with variables
+
+![Screenshot](src/assets/editor.png)
