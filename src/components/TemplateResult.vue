@@ -20,7 +20,7 @@ const { textResult } = useEditor()
         <CardTitle>Template Result</CardTitle>
         <CardDescription>Result of the template with the variables</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent class="whitespace-pre-wrap">
         {{ textResult }}
       </CardContent>
     </Card>
