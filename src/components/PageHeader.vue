@@ -1,13 +1,38 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { NavigationMenuItem } from '@nuxt/ui'
+
+const items = computed<NavigationMenuItem[]>(() => [
+  {
+    label: 'doT.js',
+    to: 'https://olado.github.io/doT/index.html',
+    external: true,
+    target: '_blank'
+  }
+])
+</script>
+
 <template>
-  <header class="my-5">
-    <h1 class="text-4xl text-center font-bold">
-      doT.js Editor
-    </h1>
-    <p class="text-center mt-2">
-      An editor for <a
-        href="https://olado.github.io/doT/index.html"
-        target="_blank"
-      >doT.js</a> templates
-    </p>
-  </header>
+  <UHeader>
+    <template #title>
+      <span class="font-bold">doT.js Editor</span>
+    </template>
+
+    <UNavigationMenu :items="items" />
+
+    <template #right>
+      <UColorModeButton />
+
+      <UTooltip text="Open on GitHub" :kbds="['meta', 'G']">
+        <UButton
+          color="neutral"
+          variant="ghost"
+          to="https://github.com/Lexuil/dot-editor"
+          target="_blank"
+          icon="simple-icons:github"
+          aria-label="GitHub"
+        />
+      </UTooltip>
+    </template>
+  </UHeader>
 </template>

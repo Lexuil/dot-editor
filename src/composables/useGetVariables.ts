@@ -1,6 +1,6 @@
 import { type Ref, ref } from 'vue'
 
-export default function useGetVariables (): {
+export default function useGetVariables(): {
   getVariables: (template: string) => string[]
   variables: Ref<string[]>
 } {
@@ -8,14 +8,14 @@ export default function useGetVariables (): {
   const regexVariables = /it\.([a-zA-Z_]\w*)/g
   const variables = ref<string[]>([])
 
-  function getVariables (template: string): string[] {
+  function getVariables(template: string): string[] {
     const expressions = template.match(regexExpressions) ?? []
 
     const allVariables: string[] = []
 
-    expressions.forEach(expression => {
+    expressions.forEach((expression) => {
       const matches = [...expression.matchAll(regexVariables)]
-      const variables = matches.map(match => match[1])
+      const variables = matches.map((match) => match[1])
       allVariables.push(...variables)
     })
 

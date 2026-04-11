@@ -1,8 +1,6 @@
 {
   "displayName": "doTjs",
-  "fileTypes": [
-    "dot"
-  ],
+  "fileTypes": ["dot"],
   "name": "dot",
   "patterns": [
     {

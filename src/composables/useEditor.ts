@@ -10,7 +10,7 @@ dot.templateSettings.strip = false
 let editor: monaco.editor.IStandaloneCodeEditor | null = null
 const variables = reactive<Record<string, string>>({})
 
-export default function useEditor (editorId?: string | undefined): {
+export default function useEditor(editorId?: string): {
   editor: monaco.editor.IStandaloneCodeEditor | null
   variables: Record<string, string>
   textResult: Ref<string>
@@ -61,7 +61,7 @@ Is it true
       theme: 'andromeeda',
       lineNumbers: 'off',
       padding: {
-        top: 30,
+        top: 20,
         bottom: 10
       },
       rulers: [80],
@@ -82,31 +82,30 @@ Is it true
 
   // ---------------------------------------------------------------------------
   // Methods
-  function getEditorText (): string {
+  function getEditorText(): string {
     if (editor === null) {
       return ''
     }
     return editor.getValue()
   }
 
-  async function getEditorVariables (): Promise<void> {
+  async function getEditorVariables(): Promise<void> {
     const content = getEditorText()
 
-    const newVariables = getVariables(content ?? '')
-      .reduce<Record<string, string>>((acc, curr) => {
+    const newVariables = getVariables(content ?? '').reduce<Record<string, string>>((acc, curr) => {
       acc[curr] = ''
       return acc
     }, {})
 
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    Object.keys(variables).forEach(key => delete variables[key])
+    Object.keys(variables).forEach((key) => delete variables[key])
 
-    Object.keys(newVariables).forEach(key => {
+    Object.keys(newVariables).forEach((key) => {
       variables[key] = newVariables[key]
     })
   }
 
-  function setEditorTheme (theme: 'andromeeda' | 'min-light'): void {
+  function setEditorTheme(theme: 'andromeeda' | 'min-light'): void {
     if (editor === null) {
       return
     }
