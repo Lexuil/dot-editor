@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import useEditor from '@/composables/useEditor'
-import dot from 'dot'
-dot.templateSettings.strip = false
 
 const { textResult } = useEditor()
 </script>
