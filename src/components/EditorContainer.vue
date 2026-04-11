@@ -4,8 +4,5 @@ useEditor('container')
 </script>
 
 <template>
-  <div
-    id="container"
-    class="h-96 w-screen md:w-[43rem]"
-  />
+  <div id="container" class="h-96 w-screen rounded-lg overflow-hidden" />
 </template>
