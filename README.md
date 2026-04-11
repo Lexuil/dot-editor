@@ -84,8 +84,3 @@ src/
 	lib/             # custom doT TextMate grammar
 	views/           # route-level pages
 ```
-
-## Notes
-
-- Variable extraction currently detects properties referenced as `it.<name>` inside template tags.
-- Rendering errors are handled gracefully and clear the preview output instead of crashing the app.
