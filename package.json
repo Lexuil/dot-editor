@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "vue-tsc -b && vp build",
+    "build": "vp build",
     "preview": "vp preview",
-    "lint": "eslint \"src/**/*.{js,vue}\" && vue-tsc --noEmit",
+    "lint": "vp lint",
     "prepare": "vp config"
   },
   "dependencies": {
